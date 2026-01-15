@@ -8,6 +8,10 @@
   <Folder Name="/01 ExempleDalBll/">
     <Project Path="ExempleDalBll/ExempleDalBll.csproj" />
   </Folder>
-  <Folder Name="/02 ExempleCqs/" />
-  <Folder Name="/03 ToolsCqs/" />
+  <Folder Name="/02 ExempleCqs/">
+    <Project Path="ExempleCqs/ExempleCqs.csproj" />
+  </Folder>
+  <Folder Name="/03 ToolsCqs/">
+    <Project Path="Tools.Cqs/Tools.Cqs.csproj" />
+  </Folder>
 </Solution>

@@ -1,18 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using IDalProduitRepository = ExempleDalBll.Dal.Repositories.IProduitRepository;
-using DalProduitService = ExempleDalBll.Dal.Services.ProduitService;
-
+#region Injection de dépendance
+using ExempleCqs.Domain.Commands;
+using ExempleCqs.Domain.Entities;
+using ExempleCqs.Domain.Queries;
+using ExempleCqs.Domain.Repositories;
+using ExempleCqs.Domain.Services;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data.Common;
-using Microsoft.Data.SqlClient;
-using ExempleDalBll.Bll.Entities;
-using ExempleDalBll.Bll.Repositories;
-using ExempleDalBll.Bll.Services;
 
-#region Injection de dépendance
 IServiceCollection serviceCollection = new ServiceCollection();
 serviceCollection.AddSingleton<DbConnection, SqlConnection>(sp => new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProductDatabase;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
-serviceCollection.AddSingleton<IDalProduitRepository, DalProduitService>();
 serviceCollection.AddSingleton<IProduitRepository, ProduitService>();
 #endregion
 
@@ -20,9 +18,20 @@ IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
 IProduitRepository produitRepository = serviceProvider.GetRequiredService<IProduitRepository>();
 
-produitRepository.Insert(new Produit("Coca-Cola 33cl", 1.2));
+produitRepository.Execute(new AddProduitCommand("Fanta 50cl", 1.5));
 
-foreach (Produit p in produitRepository.Get())
+foreach (Produit p in produitRepository.Execute(new GetAllProduitQuery()))
 {
     Console.WriteLine($"[{p.Id:D5}] - {p.Nom} ({p.Prix:N2} Euro)");
 }
+
+//Produit? produit = produitRepository.Execute(new GetProduitByIdQuery(1002));
+
+//if(produit is not null)
+//{
+//    Console.WriteLine($"[{produit.Id:D5}] - {produit.Nom} ({produit.Prix:N2} Euro)");
+//}
+//else
+//{
+//    Console.WriteLine("Produit non trouvé");
+//}
