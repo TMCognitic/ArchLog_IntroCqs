@@ -3,7 +3,7 @@ using Tools.Cqs.Queries;
 
 namespace ExempleCqs.Domain.Queries
 {
-    public class GetAllProduitQuery : IQueryDefinition<IEnumerable<Produit>>
+    public sealed class GetAllProduitQuery : IQueryDefinition<IEnumerable<Produit>>
     {
     }
 }

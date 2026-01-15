@@ -8,13 +8,13 @@ using Tools.Cqs.Queries;
 
 namespace ExempleCqs.Domain.Queries
 {
-    public sealed class GetProduitByIdQuery : IQueryDefinition<Produit?>
+    public sealed class GetProduitParNomQuery : IQueryDefinition<IEnumerable<Produit>>
     {
-        public int Id { get; }
+        public string Fragment { get; }
 
-        public GetProduitByIdQuery(int id)
+        public GetProduitParNomQuery(string fragment)
         {
-            Id = id;
+            Fragment = fragment;
         }
     }
 }

@@ -7,13 +7,14 @@ using Tools.Cqs.Commands;
 
 namespace ExempleCqs.Domain.Commands
 {
-    public sealed class AddProduitCommand : ICommandDefinition
+    public sealed class UpdateProduitCommand : ICommandDefinition
     {
+        public int Id { get; }
         public string Nom { get; }
         public double Prix { get; }
-
-        public AddProduitCommand(string nom, double prix)
+        public UpdateProduitCommand(int id, string nom, double prix)
         {
+            Id = id;
             Nom = nom;
             Prix = prix;
         }

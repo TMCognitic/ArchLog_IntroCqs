@@ -18,9 +18,9 @@ IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
 IProduitRepository produitRepository = serviceProvider.GetRequiredService<IProduitRepository>();
 
-produitRepository.Execute(new AddProduitCommand("Fanta 50cl", 1.5));
+//produitRepository.Execute(new AddProduitCommand("Fanta 50cl", 1.5));
 
-foreach (Produit p in produitRepository.Execute(new GetAllProduitQuery()))
+foreach (Produit p in produitRepository.Execute(new GetProduitParNomQuery("fa")))
 {
     Console.WriteLine($"[{p.Id:D5}] - {p.Nom} ({p.Prix:N2} Euro)");
 }

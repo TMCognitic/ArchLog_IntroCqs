@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/00 Database/">
-    <Project Path="ProductDatabase/ProductDatabase.sqlproj">
+    <Project Path="ProductDatabase/ProductDatabase.sqlproj" Id="fca7f07a-1ca8-4717-ae8f-b201d7bb0ba0">
       <Build />
       <Deploy />
     </Project>

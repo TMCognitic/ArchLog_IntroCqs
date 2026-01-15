@@ -9,7 +9,10 @@ namespace ExempleCqs.Domain.Repositories
     public interface IProduitRepository :
         IQueryHandler<GetAllProduitQuery, IEnumerable<Produit>>,
         IQueryHandler<GetProduitByIdQuery, Produit?>,
-        ICommandHandler<AddProduitCommand>
+        IQueryHandler<GetProduitParNomQuery, IEnumerable<Produit>>,
+        ICommandHandler<AddProduitCommand>,
+        ICommandHandler<UpdateProduitCommand>,
+        ICommandHandler<DeleteProduitCommand>
     {
     }
 }
