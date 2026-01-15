@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/00 Database/">
+    <Project Path="ProductDatabase/ProductDatabase.sqlproj">
+      <Build />
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/01 ExempleDalBll/">
+    <Project Path="ExempleDalBll/ExempleDalBll.csproj" />
+  </Folder>
+  <Folder Name="/02 ExempleCqs/" />
+  <Folder Name="/03 ToolsCqs/" />
+</Solution>
