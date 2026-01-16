@@ -8,7 +8,7 @@ namespace ExempleCqs.Domain.Repositories
 {
     public interface IProduitRepository :
         IQueryHandler<GetAllProduitQuery, IEnumerable<Produit>>,
-        IQueryHandler<GetProduitByIdQuery, Produit?>,
+        IQueryHandler<GetProduitByIdQuery, Produit>,
         IQueryHandler<GetProduitParNomQuery, IEnumerable<Produit>>,
         ICommandHandler<AddProduitCommand>,
         ICommandHandler<UpdateProduitCommand>,

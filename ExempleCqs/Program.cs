@@ -8,6 +8,7 @@ using ExempleCqs.Domain.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data.Common;
+using Tools.Cqs.Results;
 
 IServiceCollection serviceCollection = new ServiceCollection();
 serviceCollection.AddSingleton<DbConnection, SqlConnection>(sp => new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProductDatabase;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
@@ -18,12 +19,21 @@ IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
 IProduitRepository produitRepository = serviceProvider.GetRequiredService<IProduitRepository>();
 
-//produitRepository.Execute(new AddProduitCommand("Fanta 50cl", 1.5));
+CqsResult result = produitRepository.Execute(new AddProduitCommand("Fanta 50cl", 1.5));
 
-foreach (Produit p in produitRepository.Execute(new GetProduitParNomQuery("fa")))
+if(result.IsFailure)
+    Console.WriteLine(result.ErrorMessage);
+
+CqsResult<IEnumerable<Produit>> r = produitRepository.Execute(new GetProduitParNomQuery("fa"));
+
+if(r.IsSuccess)
 {
-    Console.WriteLine($"[{p.Id:D5}] - {p.Nom} ({p.Prix:N2} Euro)");
+    foreach (Produit p in r.Data)
+    {
+        Console.WriteLine($"[{p.Id:D5}] - {p.Nom} ({p.Prix:N2} Euro)");
+    }
 }
+
 
 //Produit? produit = produitRepository.Execute(new GetProduitByIdQuery(1002));
 

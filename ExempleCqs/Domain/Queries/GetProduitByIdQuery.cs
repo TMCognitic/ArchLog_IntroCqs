@@ -8,7 +8,7 @@ using Tools.Cqs.Queries;
 
 namespace ExempleCqs.Domain.Queries
 {
-    public sealed class GetProduitByIdQuery : IQueryDefinition<Produit?>
+    public sealed class GetProduitByIdQuery : IQueryDefinition<Produit>
     {
         public int Id { get; }
 

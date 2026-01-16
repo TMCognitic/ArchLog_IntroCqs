@@ -1,10 +1,13 @@
 ﻿using BStorm.Tools.Database;
+using ExempleCqs.CustomErrors;
 using ExempleCqs.Domain.Commands;
 using ExempleCqs.Domain.Entities;
 using ExempleCqs.Domain.Mappers;
 using ExempleCqs.Domain.Queries;
 using ExempleCqs.Domain.Repositories;
+using System.Collections.Generic;
 using System.Data.Common;
+using Tools.Cqs.Results;
 
 namespace ExempleCqs.Domain.Services
 {
@@ -18,34 +21,96 @@ namespace ExempleCqs.Domain.Services
             _dbConnection.Open();
         }
 
-        public IEnumerable<Produit> Execute(GetAllProduitQuery query)
+        public CqsResult<IEnumerable<Produit>> Execute(GetAllProduitQuery query)
         {
-            return _dbConnection.ExecuteReader("SELECT Id, Nom, Prix FROM Produit;", dr => dr.ToProduit()).ToList();
+            try
+            {
+                return _dbConnection.ExecuteReader("SELECT Id, Nom, Prix FROM Produit;", dr => dr.ToProduit()).ToList();
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
-        public Produit? Execute(GetProduitByIdQuery query)
+        public CqsResult<Produit> Execute(GetProduitByIdQuery query)
         {
-            return _dbConnection.ExecuteReader("SELECT Id, Nom, Prix FROM Produit WHERE Id = @Id;", dr => dr.ToProduit(), parameters: query).SingleOrDefault();
+            try
+            {
+                Produit? produit = _dbConnection.ExecuteReader("SELECT Id, Nom, Prix FROM Produit WHERE Id = @Id;", dr => dr.ToProduit(), parameters: query).SingleOrDefault();
+
+                if (produit is null)
+                    return Errors.ProductNotFound;
+
+                return produit;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
-        public bool Execute(AddProduitCommand command)
+        public CqsResult Execute(AddProduitCommand command)
         {
-            return 1 == _dbConnection.ExecuteNonQuery("INSERT INTO Produit (Nom, Prix) VALUES (@Nom, @Prix);", parameters: command);
+            try
+            {
+                int rows = _dbConnection.ExecuteNonQuery("INSERT INTO Produits (Nom, Prix) VALUES (@Nom, @Prix);", parameters: command);
+
+                if (rows == 0)
+                    return Error.Create("Aucune ligne insérée");
+
+                return CqsResult.Success();            
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
-        public bool Execute(UpdateProduitCommand command)
+        public CqsResult Execute(UpdateProduitCommand command)
         {
-            return 1 == _dbConnection.ExecuteNonQuery("UPDATE Produit SET Nom = @Nom, Prix = @Prix WHERE Id = @Id;", parameters: command);
+            try
+            {
+                int rows = _dbConnection.ExecuteNonQuery("UPDATE Produit SET Nom = @Nom, Prix = @Prix WHERE Id = @Id;", parameters: command);
+
+                if (rows == 0)
+                    return Errors.ProductNotFound;
+
+                return CqsResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
-        public bool Execute(DeleteProduitCommand command)
+        public CqsResult Execute(DeleteProduitCommand command)
         {
-            return 1 == _dbConnection.ExecuteNonQuery("DELETE FROM Produit WHERE Id = @Id;", parameters: command);
+            try
+            {
+                int rows = _dbConnection.ExecuteNonQuery("DELETE FROM Produit WHERE Id = @Id;", parameters: command);
+
+                if (rows == 0)
+                    return Errors.ProductNotFound;
+
+                return CqsResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
 
-        public IEnumerable<Produit> Execute(GetProduitParNomQuery query)
+        public CqsResult<IEnumerable<Produit>> Execute(GetProduitParNomQuery query)
         {
-            return _dbConnection.ExecuteReader("SELECT Id, Nom, Prix FROM Produit WHERE Nom LIKE CONCAT(N'%', @Fragment, N'%');", dr => dr.ToProduit(), parameters:query).ToList();
+            try
+            {
+                return _dbConnection.ExecuteReader("SELECT Id, Nom, Prix FROM Produit WHERE Nom LIKE CONCAT(N'%', @Fragment, N'%');", dr => dr.ToProduit(), parameters: query).ToList();
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
         }
     }
 }
